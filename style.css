@@ -1,0 +1,154 @@
+@charset "utf-8";
+/* CSS Document */
+
+/* Reset CSS */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+margin: 0;
+padding: 0;
+border: 0;
+font-size: 100%;
+font: inherit;
+vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+display: block;
+}
+body {
+line-height: 1;
+}
+ol, ul {
+list-style: none;
+}
+blockquote, q {
+quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+content: '';
+content: none;
+}
+table {
+border-collapse: collapse;
+border-spacing: 0;
+}
+
+/* Own CSS */
+html, body, header, section, footer {
+		margin: 0;
+		padding: 0;
+}
+body {
+	font-family: "Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, sans-serif;
+	text-align: center;
+	color: white;
+	background-color: rgba(18,47,70,1.00);
+	background-image: url(bg.jpg);
+	background-attachment: fixed;
+	background-position: center center;
+	background-size: cover;
+	background-repeat: no-repeat;
+	cursor: default;
+	text-shadow: 0 1px 5px rgba(0,0,0,1.00);
+}
+header {
+	height: 20vh;
+}
+h1 {
+	padding-top: 2vmax;
+	font-size: 7vh;
+	font-weight: bold;
+	font-variant: petite-caps;
+	font-style: italic;
+	color: rgba(50,52,167,1.00);
+}
+h1 span {
+	color: rgba(154,45,47,1.00);
+}
+h2 {
+	font-size: 3vh;
+	font-weight: bold;
+}
+section {
+	height: 75vh;
+	position: relative;
+}
+h3 {
+	font-size: 3vh;
+	padding-bottom: 2vmax;
+}
+button {
+	border: none;
+	border-radius: 50px;
+	padding: 1vh 5vh 1.7vh;
+	margin-left: 20px;
+	margin-right: 20px;
+	background-color: rgba(50,52,167,1.00);
+	color: #FFF;
+	font-variant: small-caps;
+	font-size: 1.5vmax;
+	min-width: 10vmax;
+	transition: all 0.2s ease-out 0s;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.75);
+}
+button:hover {
+	background-color: rgba(154,45,47,1.00);
+	cursor: pointer;
+	transition: all 0.2s ease-out;
+}
+.active {
+	background-color: rgba(154,45,47,1.00);
+}
+#referent {
+	opacity: 0;
+}
+.scrollable {
+	width: 60%;
+	height: 2.5vh;
+	background-color: white;
+	margin: 10vh auto;
+	border-radius: 25px;
+	box-shadow: inset 0 1px 5px rgba(0,0,0,0.75);
+}
+.scrolled {
+	height: 2.5vh;
+	border-radius: 25px;
+	position: absolute;
+	left: 20%;
+}
+#referentSpeed {
+	background-color: rgba(0,233,171,0.60);
+	transition: all 0s linear;
+}
+#timer {
+	font-size: 4vh;
+	font-stretch: semi-expanded;
+	padding-bottom: 4vh;
+}
+#currentSpeed {
+	background-color: rgba(166,0,2,0.60);
+}
+footer {
+	height: 5vh;
+}
+#proTip {
+	padding-bottom: 1vmin;
+	color: grey;
+}
+a {
+	text-decoration: none;
+	color: white;
+}

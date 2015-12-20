@@ -1,0 +1,262 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta content="initial-scale=1, minimum-scale=1, user-scalable=no, maximum-scale=1, width=device-width" name="viewport"/>
+<meta content="telephone=no" name="format-detection"/>
+<meta content="Race to be the fastest scroller EVER !" name="description"/>
+<meta name="keywords" content="scroll, speed, race, game, competition"/>
+<meta name="author" content="Pierre Burton"/>
+<title>Speed'O Scroller</title>
+<link href="style.css" rel="stylesheet" type="text/css"/>
+</head>
+
+<body>
+    <header>
+        <h1>Speed'O <span>Scroller</span></h1>
+        <h2>Race to be the fastest scroller EVER !</h2>
+    </header>
+    <section>
+        <h3>Select a difficulty and start scrolling</h3>
+        <div class="container">
+        	<button type="button" id="easy">easy</button>
+            <button type="button" id="medium">medium</button>
+            <button type="button" id="endurance">endurance</button>
+        </div>
+        <div class="container">
+        	<div class="scrolled" id="referentSpeed"></div>
+        	<div class="scrollable" id="referent"></div>
+            <div class="scrolled" id="currentSpeed"></div>
+            <div class="scrollable" id="current"></div>
+            <div id="timer" style="opacity: 0;"></div>
+            <button type="button" id="versus" style="display: none;">load ghost</button>
+            <button type="button" id="restart" style="display: none;">restart alone</button>
+        </div>
+    </section>
+    <footer>
+    	<div id="proTip">-</div>
+    	<h5>Powered by <a href="http://pierre-burton.be" target="_blank" title="Pierre Burton's portfolio">Pierre Burton</a></h5>
+    </footer>
+<script type="text/javascript">
+	var easy = document.querySelector("#easy"),
+		medium = document.querySelector("#medium"),
+		endurance = document.querySelector("#endurance"),
+		current = document.querySelector("#current"),
+		currentSpeed = document.querySelector("#currentSpeed"),
+		referent = document.querySelector("#referent"),
+		referentSpeed = document.querySelector("#referentSpeed"),
+		timer = document.querySelector("#timer"),
+		versus = document.querySelector("#versus"),
+		restart = document.querySelector("#restart"),
+		totalTime = "",
+		span = 0,
+		level = 1,
+		proTip = document.querySelector("#proTip"),
+		tips = {tip1:"Pro tip : Timer starts when you select a difficulty, don't waste time !", tip2:"Pro tip : Ghost's speed is based on your last run.", tip3:"Pro tip : Be sure your mouse can handle the game.", tip4:"Pierre Burton declines all responsibilities about peace disturbing of others or mouse breakdown.", tip5:"Feedback ? Follow the link below to contact Pierre !" };
+	
+	function proTipping() {
+		var randomTip = Math.floor((Math.random() * 10) -1); 
+		switch (randomTip)
+		{
+			case 1:
+			case 2:
+			proTip.innerHTML == ""+tips.tip1+"";
+			break;
+			
+			case 3:
+			case 4:
+			proTip.innerHTML == ""+tips.tip2+"";
+			break;
+			
+			case 5:
+			case 6:
+			proTip.innerHTML == ""+tips.tip3+"";
+			break;
+			
+			case 7:
+			case 8:
+			proTip.innerHTML = ""+tips.tip4+"";
+			break;
+			
+			case 9:
+			case 10:
+			proTip.innerHTML = ""+tips.tip5+"";
+			break;
+		}
+	};
+	
+	function hardReset() { // reset all the data
+		document.removeEventListener("wheel", game);
+		document.removeEventListener("wheel", ghostMode);
+		span = 0;
+		totalTime = 0;
+		currentSpeed.style.width = "0%";
+		referentSpeed.style.transitionDuration = "0s";
+		referentSpeed.style.width = "0";
+		referent.style.opacity = "0";
+		versus.style.display = "none";
+		restart.style.display = "none";
+		timer.style.opacity = "0";
+		proTipping();
+	};
+	
+	function softReset() { //reset small amount of data
+
+		referentSpeed.style.width = "0";
+		referentSpeed.style.transitionDuration = "0s";
+		timer.style.opacity = "0";
+		totalTime = 0;
+		span = 0;
+		currentSpeed.style.width = "0%";
+		proTipping();
+		document.removeEventListener("wheel", ghostMode);
+
+	};
+	
+	function soloReset() { // reset data for solo mode
+		referentSpeed.style.width = "0";
+		referentSpeed.style.transitionDuration = "0s";
+		timer.style.opacity = "0";
+		totalTime = 0;
+		span = 0;
+		currentSpeed.style.width = "0%";
+		referent.style.opacity = "0";
+		proTipping();
+		document.removeEventListener("wheel", game);
+		versus.innerHTML = "load ghost";
+		versus.removeEventListener("click", fightGhost, false);
+		versus.addEventListener("click", loadGhost, false);
+	}
+	
+	function expandCurrent() { // expand the bar when scroll
+		span++;
+		wheeled = (60 / (60*level))*span;
+		currentSpeed.style.width = ""+wheeled+"%";
+	};
+	
+	function ghost() { // the ghost settings
+		totalTime = interval();
+		timer.style.opacity = "0";
+		var seconds = totalTime/1000;
+
+		
+		
+		if (seconds > 0)
+		{
+			referentSpeed.style.transitionDuration = ""+seconds+"s";
+			referentSpeed.style.width = "60%";
+		}
+	};
+	
+	function ghostMode() { //game mode
+	
+		if (currentSpeed.offsetWidth < current.offsetWidth)
+		{	
+			expandCurrent();
+		}
+		else
+		{	
+			document.removeEventListener("wheel", ghostMode);
+			dateOffset = new Date(),
+			timeOffset = dateOffset.getTime(),
+			interval();
+			versus.innerHTML = "load ghost";
+			versus.removeEventListener("click", fightGhost, false);
+			versus.addEventListener("click", loadGhost, false);
+		}
+	};
+	
+	function game() {	// Default game mode	
+		
+		if (currentSpeed.offsetWidth < current.offsetWidth)
+		{	
+			expandCurrent();
+		}
+		else
+		{	
+			document.removeEventListener("wheel", game);
+			dateOffset = new Date(),
+			timeOffset = dateOffset.getTime(),
+			interval();
+			versus.style.display = "inline-block";
+			restart.style.display = "inline-block";
+		}
+	};
+	
+	function levelSelect() { // level selection
+		if (this == easy){
+			this.classList.add("active");
+			medium.classList.remove("active");
+			endurance.classList.remove("active");
+			hardReset();
+			level = 1;
+			launch();
+		}
+		else if (this == medium){
+			this.classList.add("active");
+			easy.classList.remove("active");
+			endurance.classList.remove("active");
+			hardReset();
+			level = 4;
+			launch();
+		}
+		else {
+			this.classList.add("active");
+			medium.classList.remove("active");
+			easy.classList.remove("active");
+			hardReset();
+			level = 10;
+			launch();
+		}
+	};
+	
+	function launch() {
+		date = new Date();
+		time = date.getTime();
+		document.addEventListener("wheel",  game, false);
+	};
+
+	function fightAlone() {
+		soloReset();
+		launch();
+	};
+	
+	function loadGhost() {
+		softReset();
+		referent.style.opacity = "1";
+		versus.removeEventListener("click", loadGhost, false);
+		versus.innerHTML = "fight ghost";
+		versus.addEventListener("click", fightGhost, false);
+	};
+	
+	function fightGhost() {
+		ghost();
+		date = new Date();
+		time = date.getTime();
+		document.addEventListener("wheel", ghostMode, false);
+		
+	};
+	
+	easy.addEventListener("click", levelSelect, false);
+	medium.addEventListener("click", levelSelect, false);
+	endurance.addEventListener("click", levelSelect, false);
+	versus.addEventListener("click", loadGhost, false);
+	restart.addEventListener("click", fightAlone, false);
+	
+	function interval() { // timer
+		totalTime = timeOffset - time;
+		
+		var minutes = Math.floor((totalTime/1000)/60),
+			seconds = Math.floor((totalTime/1000)-(minutes*60));
+			milliseconds = Math.floor(totalTime - (seconds*1000) - ((minutes*60)*1000));
+			
+			timer.style.opacity = "1";
+			timer.innerHTML = ""+minutes+"\' "+seconds+"\" "+milliseconds+"ms";
+		return totalTime;
+
+	};
+	
+	
+</script>
+</body>
+</html>
